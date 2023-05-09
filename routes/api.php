@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::delete('/produtos/{id}', [ProdutoController::class, 'destroy']);
+Route::put('/produtos/{id}', [ProdutoController::class, 'update']);
+Route::get('/produtos/{id}', [ProdutoController::class, 'show']);
 Route::get('/produtos', [ProdutoController::class, 'index']);
+Route::post('/produtos', [ProdutoController::class, 'store']);
 
 Route::get('/', function () {
     return response()->json([

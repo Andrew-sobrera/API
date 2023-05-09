@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProdutoResource;
 use Illuminate\Http\Request;
 use App\Models\Produto;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Mail\Mailables\Content;
 
 class ProdutoController extends Controller
 {
@@ -13,7 +15,7 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        $produtos = Produto::all();
+        $produtos = Produto::paginate();
         return ProdutoResource::collection($produtos);
     }
 
@@ -23,7 +25,10 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $produto = Produto::create($data);
+
+        return new ProdutoResource($produto);
     }
 
     /**
@@ -31,7 +36,8 @@ class ProdutoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $produto = Produto::findOrFail($id);
+         return new ProdutoResource($produto);
     }
 
 
@@ -40,7 +46,14 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->all();
+
+        $produto = Produto::findOrFail($id);
+
+        $produto->update($data);
+
+        return new ProdutoResource($produto);
+
     }
 
     /**
@@ -48,6 +61,7 @@ class ProdutoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Produto::findOrFail($id)->delete();
+
     }
 }
